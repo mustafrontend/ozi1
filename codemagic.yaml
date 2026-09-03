@@ -33,6 +33,7 @@ workflows:
         script: |
           export APP_STORE_CONNECT_PRIVATE_KEY="${APP_STORE_CONNECT_PRIVATE_KEY:-$CERTIFICATE_PRIVATE_KEY}"
           keychain initialize
+          app-store-connect create-certificate --type IOS_DISTRIBUTION || true
           app-store-connect fetch-signing-files "$BUNDLE_ID" \
             --type IOS_APP_STORE \
             --create
