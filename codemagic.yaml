@@ -25,7 +25,6 @@ workflows:
           npm run build
       - name: Initialize & Sync Capacitor iOS
         script: |
-          npx cap add ios || true
           npx cap sync ios
       - name: Set up code signing settings on Xcode project
         script: |
