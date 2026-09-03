@@ -26,12 +26,18 @@ workflows:
       - name: Initialize & Sync Capacitor iOS
         script: |
           npx cap sync ios
-      - name: Set up code signing settings on Xcode project
-        script: |
-          xcode-project use-profiles
-      - name: Install CocoaPods
+      - name: Install CocoaPods Dependencies
         script: |
           cd ios/App && pod install
+      - name: Set up code signing settings on Xcode project
+        script: |
+          export APP_STORE_CONNECT_PRIVATE_KEY="${APP_STORE_CONNECT_PRIVATE_KEY:-$CERTIFICATE_PRIVATE_KEY}"
+          keychain initialize
+          app-store-connect fetch-signing-files "$BUNDLE_ID" \
+            --type IOS_APP_STORE \
+            --create
+          keychain add-certificates
+          xcode-project use-profiles
       - name: Build iOS IPA
         script: |
           xcode-project build-ipa \
