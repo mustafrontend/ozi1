@@ -1,0 +1,135 @@
+@import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Cinzel:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Scheherazade+New:wght@400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #F8FAFC; /* Light mode bg-slate-50 default */
+  --foreground: #0F172A; /* Slate 900 */
+  --primary: #D6AB4C;
+  --primary-foreground: #081C1B;
+  --secondary: #1E5048;
+  --secondary-foreground: #F8FAFC;
+  --accent: #87A8DA;
+  --accent-foreground: #10233A;
+  --muted: #F1F5F9;
+  --muted-foreground: #64748B;
+  --card: #FFFFFF;
+  --card-foreground: #0F172A;
+  --border: #E2E8F0;
+  --input: #F1F5F9;
+  --font-heading: 'Cinzel', 'Amiri', serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+  --font-arabic: 'Amiri', 'Scheherazade New', serif;
+  --radius: 18px;
+}
+
+.dark {
+  --background: #081C1B;
+  --foreground: #F7F1E4;
+  --primary: #D6AB4C;
+  --primary-foreground: #13211E;
+  --secondary: #1E5048;
+  --secondary-foreground: #F7F1E4;
+  --accent: #87A8DA;
+  --accent-foreground: #10233A;
+  --muted: #16332F;
+  --muted-foreground: #94A3B8;
+  --card: #102925;
+  --card-foreground: #F7F1E4;
+  --border: #31534D;
+  --input: #173A35;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Typography Utility Classes */
+.font-heading {
+  font-family: var(--font-heading);
+}
+
+.font-arabic {
+  font-family: var(--font-arabic);
+}
+
+.font-body {
+  font-family: var(--font-body);
+}
+
+/* Islamic Luxury CSS Styles */
+
+/* Parchment gradients */
+.bg-parchment-light {
+  background: linear-gradient(185deg, #FCF9F2 0%, #F5ECE0 100%);
+}
+
+.bg-parchment-dark {
+  background: linear-gradient(185deg, #0D2421 0%, #081C1B 100%);
+}
+
+/* Golden Metallic Gradients & Text */
+.bg-gold-gradient {
+  background: linear-gradient(135deg, #F3E2B3 0%, #D6AB4C 50%, #B8860B 100%);
+}
+
+.bg-gold-metallic {
+  background: linear-gradient(135deg, #FFF4D0 0%, #E2BA5A 45%, #996515 100%);
+}
+
+.text-gold-gradient {
+  background: linear-gradient(135deg, #D6AB4C 0%, #F5D77F 50%, #B8860B 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Ultra-Fine Golden Borders & Glows */
+.border-gold {
+  border: 0.5px solid rgba(214, 171, 76, 0.4);
+}
+
+.border-gold-light {
+  border: 0.5px solid rgba(214, 171, 76, 0.2);
+}
+
+.border-gold-glow {
+  border: 1px solid rgba(214, 171, 76, 0.6);
+  box-shadow: 0 0 12px rgba(214, 171, 76, 0.25);
+}
+
+.glow-gold {
+  box-shadow: 0 4px 20px -2px rgba(214, 171, 76, 0.25);
+}
+
+/* Calligraphic Headings */
+.calligraphic-title {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #1E5048 0%, #0F172A 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.dark .calligraphic-title {
+  background: linear-gradient(135deg, #F5D77F 0%, #D6AB4C 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Custom scrollbar hiding utility */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

@@ -1,0 +1,16 @@
+{
+  "name": "Huzur",
+  "short_name": "Huzur",
+  "description": "Namaz vakitleri, Kur'an tilaveti ve kıble pusulası",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#081C1B",
+  "theme_color": "#081C1B",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ]
+}
