@@ -44,13 +44,13 @@ workflows:
             PROFILE_UUID=$(security cms -D -i "$PROFILE_PATH" | grep -A1 UUID | tail -n 1 | tr -d '<string>/ \t\r\n')
             echo "Using Provisioning Profile UUID: $PROFILE_UUID"
             xcode-project build-ipa \
-              --project "ios/App/App.xcodeproj" \
+              --workspace "ios/App/App.xcworkspace" \
               --scheme "App" \
               --archive-flags "PROVISIONING_PROFILE_SPECIFIER=$PROFILE_UUID"
           else
             echo "No profile found in default dir, building standard IPA"
             xcode-project build-ipa \
-              --project "ios/App/App.xcodeproj" \
+              --workspace "ios/App/App.xcworkspace" \
               --scheme "App"
           fi
     artifacts:
