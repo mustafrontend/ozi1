@@ -35,9 +35,20 @@ workflows:
           agvtool new-version -all $PROJECT_BUILD_NUMBER
       - name: Build iOS Xcode App
         script: |
-          xcode-project build-ipa \
-            --project "ios/App/App.xcodeproj" \
-            --scheme "App"
+          PROFILE_PATH=$(find ~/Library/MobileDevice/Provisioning\ Profiles -name "*.mobileprovision" | head -n 1)
+          if [ -n "$PROFILE_PATH" ]; then
+            PROFILE_UUID=$(security cms -D -i "$PROFILE_PATH" | grep -A1 UUID | tail -n 1 | tr -d '<string>/ \t\r\n')
+            echo "Using Provisioning Profile UUID: $PROFILE_UUID"
+            xcode-project build-ipa \
+              --project "ios/App/App.xcodeproj" \
+              --scheme "App" \
+              --archive-flags "PROVISIONING_PROFILE_SPECIFIER=$PROFILE_UUID"
+          else
+            echo "No profile found in default dir, building standard IPA"
+            xcode-project build-ipa \
+              --project "ios/App/App.xcodeproj" \
+              --scheme "App"
+          fi
     artifacts:
       - build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log
