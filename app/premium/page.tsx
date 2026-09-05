@@ -16,14 +16,14 @@ const proFeatures = [
 ];
 
 export default function PremiumScreen() {
-  const { isPremium, purchaseSelectedPlan, restorePurchases, isLoading, toggleMockPremium } = usePremium();
+  const { isPremium, purchaseSelectedPlan, restorePurchases, isLoading } = usePremium();
   const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null);
 
   const handlePurchase = async () => {
     setFeedbackMessage(null);
     const success = await purchaseSelectedPlan();
     if (success) {
-      setFeedbackMessage("Tebrikler! Huzur Pro üyeliğiniz aktif edildi.");
+      setFeedbackMessage("Tebrikler! Kuran Pusulam Pro üyeliğiniz aktif edildi.");
     } else {
       setFeedbackMessage("Satın alma tamamlanamadı veya iptal edildi.");
     }
@@ -56,14 +56,14 @@ export default function PremiumScreen() {
           <div className="relative h-48 w-full overflow-hidden rounded-2xl border border-primary/30 shadow-card">
             <img
               src="https://fwtngjyirchhhysukjxi.supabase.co/storage/v1/object/public/project-images/03cc362f-9c40-4ed7-bf9f-45d1e2d1a3a5/805dccb5-c8f4-40fe-8f1a-5113fa706da5.png"
-              alt="Huzur Pro"
+              alt="Kuran Pusulam Pro"
               className="h-full w-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
             <div className="absolute inset-x-0 bottom-0 p-5">
               <div className="flex items-center gap-1.5 text-primary">
                 <Sparkles size={16} />
-                <span className="text-[11px] font-black uppercase tracking-wider">Huzur Pro Üyelik</span>
+                <span className="text-[11px] font-black uppercase tracking-wider">Kuran Pusulam Pro Üyelik</span>
               </div>
               <h1 className="mt-1 font-heading text-3xl font-black text-amber-50 leading-tight">
                 Manevi Yolculuğunu Derinleştir
@@ -83,17 +83,9 @@ export default function PremiumScreen() {
 
         {/* Pro Active Badge */}
         {isPremium && (
-          <div className="mt-4 flex items-center justify-between rounded-2xl border border-emerald-500/30 bg-emerald-50 dark:bg-emerald-950/30 p-4">
-            <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-extrabold text-sm">
-              <Check className="h-5 w-5" />
-              <span>Huzur Pro Üyeliğiniz Aktif</span>
-            </div>
-            <button
-              onClick={toggleMockPremium}
-              className="text-[10px] font-bold text-muted-foreground underline hover:text-foreground"
-            >
-              Test Durumunu Değiştir
-            </button>
+          <div className="mt-4 flex items-center gap-2 rounded-2xl border border-emerald-500/30 bg-emerald-50 dark:bg-emerald-950/30 p-4 text-emerald-600 dark:text-emerald-400 font-extrabold text-sm">
+            <Check className="h-5 w-5" />
+            <span>Kuran Pusulam Pro Üyeliğiniz Aktif</span>
           </div>
         )}
 
@@ -143,7 +135,7 @@ export default function PremiumScreen() {
           disabled={isLoading}
           className="w-full text-base py-4"
         >
-          <span>{isLoading ? "İşlem Yapılıyor..." : "Huzur Pro ile Devam Et"}</span>
+          <span>{isLoading ? "İşlem Yapılıyor..." : "Kuran Pusulam Pro ile Devam Et"}</span>
           <ArrowRight size={18} className="ml-1" />
         </Button>
         <div className="mt-2.5 flex items-center justify-center gap-1.5 text-[10px] font-semibold text-muted-foreground">

@@ -34,11 +34,11 @@ export const ProGateModal = memo(function ProGateModal({
 
         <div className="flex items-center gap-2 text-primary font-black text-xs uppercase tracking-wider">
           <Sparkles className="h-4 w-4" />
-          <span>Huzur Pro Ayrıcalığı</span>
+          <span>Kuran Pusulam Pro Ayrıcalığı</span>
         </div>
 
         <h3 className="mt-2 font-heading text-2xl font-black text-foreground leading-tight">
-          {featureName} Huzur Pro İle Açılır
+          {featureName} Kuran Pusulam Pro İle Açılır
         </h3>
 
         <p className="mt-2 text-xs text-muted-foreground leading-relaxed">

@@ -3,8 +3,10 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, Bookmark, BookmarkCheck, Share2, Repeat, ChevronLeft, ChevronRight, Info } from "lucide-react";
-import { ALL_SURAHS } from "@/lib/quranData";
+import { ALL_SURAHS, isFreeSurah, FREE_BOOKMARK_LIMIT } from "@/lib/quranData";
 import { MiniAudioPlayer } from "@/components/molecules/MiniAudioPlayer";
+import { usePremium } from "@/components/providers/PremiumProvider";
+import { ProGateModal } from "@/components/molecules/ProGateModal";
 
 interface SurahReaderClientProps {
   surahId: string;
@@ -13,11 +15,21 @@ interface SurahReaderClientProps {
 export function SurahReaderClient({ surahId }: SurahReaderClientProps) {
   const surahIdNum = parseInt(surahId, 10);
   const currentSurah = ALL_SURAHS.find((s) => s.number === surahIdNum) || ALL_SURAHS[1]; // default Rahman
+  const { isPremium } = usePremium();
+  const isLocked = !isPremium && !isFreeSurah(currentSurah.number);
 
   const [savedVerses, setSavedVerses] = useState<number[]>([13]);
+  const [isGateOpen, setIsGateOpen] = useState(false);
 
   const toggleBookmark = (vNum: number) => {
-    setSavedVerses((prev) => (prev.includes(vNum) ? prev.filter((n) => n !== vNum) : [...prev, vNum]));
+    setSavedVerses((prev) => {
+      if (prev.includes(vNum)) return prev.filter((n) => n !== vNum);
+      if (!isPremium && prev.length >= FREE_BOOKMARK_LIMIT) {
+        setIsGateOpen(true);
+        return prev;
+      }
+      return [...prev, vNum];
+    });
   };
 
   const prevSurah = ALL_SURAHS.find((s) => s.number === surahIdNum - 1) || ALL_SURAHS[ALL_SURAHS.length - 1];
@@ -50,7 +62,7 @@ export function SurahReaderClient({ surahId }: SurahReaderClientProps) {
 
         {/* Verses List */}
         <section className="space-y-4">
-          {(currentSurah.verses || []).map((verse) => {
+          {(isLocked ? (currentSurah.verses || []).slice(0, 1) : currentSurah.verses || []).map((verse) => {
             const isSaved = savedVerses.includes(verse.number);
 
             return (
@@ -94,6 +106,25 @@ export function SurahReaderClient({ surahId }: SurahReaderClientProps) {
           })}
         </section>
 
+        {/* Pro Lock Card */}
+        {isLocked && (
+          <section className="rounded-2xl border border-primary/40 bg-primary/5 p-5 text-center shadow-card">
+            <p className="font-heading text-lg font-black text-foreground">
+              {currentSurah.name} Suresinin Devamı Pro Üyelere Özel
+            </p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Bu surenin tamamını okumak için Pro üyeliğe geçin.
+            </p>
+            <button
+              type="button"
+              onClick={() => setIsGateOpen(true)}
+              className="mt-4 w-full rounded-xl bg-primary px-4 py-3 text-xs font-black text-primary-foreground shadow-glow active:scale-95"
+            >
+              Pro Üyeliği İncele
+            </button>
+          </section>
+        )}
+
         {/* Surah Info Card */}
         {currentSurah.description && (
           <section className="rounded-2xl border-[0.5px] border-slate-200 dark:border-border bg-white dark:bg-card p-4 shadow-card">
@@ -124,6 +155,12 @@ export function SurahReaderClient({ surahId }: SurahReaderClientProps) {
           </Link>
         </section>
       </main>
+
+      <ProGateModal
+        isOpen={isGateOpen}
+        onClose={() => setIsGateOpen(false)}
+        featureName={isLocked ? `${currentSurah.name} Suresi` : "Sınırsız Ayet Kaydı"}
+      />
     </div>
   );
 }

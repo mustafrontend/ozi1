@@ -70,7 +70,7 @@ class RevenueCatService {
         const { customerInfo } = await Purchases.getCustomerInfo();
         const isPremium = typeof customerInfo.entitlements.active["premium"] !== "undefined" ||
                           typeof customerInfo.entitlements.active["pro"] !== "undefined";
-        
+
         return {
           isPremium,
           activePlanId: isPremium ? "premium_active" : null,
@@ -79,11 +79,19 @@ class RevenueCatService {
           error: null,
         };
       } catch (err: unknown) {
+        // Fail closed: never fall back to a locally-writable flag on native.
         console.error("Error fetching CustomerInfo:", err);
+        return {
+          isPremium: false,
+          activePlanId: null,
+          expirationDate: null,
+          isLoading: false,
+          error: "Abonelik durumu alınamadı",
+        };
       }
     }
 
-    // Web / Local Storage mock state
+    // Web / Next.js dev server: no native purchase flow, use local mock state.
     const cachedStatus = await storage.get(STORAGE_PREMIUM_KEY);
     const isPremium = cachedStatus === "true";
 
@@ -112,6 +120,8 @@ class RevenueCatService {
           await storage.set(STORAGE_PREMIUM_KEY, isPremium ? "true" : "false");
           return { success: isPremium };
         }
+        // Fail closed: no offerings configured, never grant premium for free.
+        return { success: false, error: "Satın alma paketleri şu anda kullanılamıyor." };
       } catch (err: unknown) {
         const message = err instanceof Error ? err.message : "Satın alma işlemi tamamlanamadı.";
         return { success: false, error: message };
@@ -141,10 +151,6 @@ class RevenueCatService {
     // Web mock restore
     const cached = await storage.get(STORAGE_PREMIUM_KEY);
     return { success: true, isPremium: cached === "true" };
-  }
-
-  public async setMockPremium(value: boolean): Promise<void> {
-    await storage.set(STORAGE_PREMIUM_KEY, value ? "true" : "false");
   }
 }
 

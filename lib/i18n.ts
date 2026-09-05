@@ -207,7 +207,7 @@ export const translations: Record<LanguageCode, TranslationSchema> = {
       unlockQibla: "Hassas Pusulayı Aç",
     },
     premium: {
-      premiumTitle: "Huzur Pro",
+      premiumTitle: "Kuran Pusulam Pro",
       premiumSubtitle: "Sınırsız manevi içerik ve reklamsız deneyim",
       proFeatures: "Pro Özellikler",
       selectPlan: "Paket Seçin",
@@ -293,7 +293,7 @@ export const translations: Record<LanguageCode, TranslationSchema> = {
       unlockQibla: "Unlock Precision Compass",
     },
     premium: {
-      premiumTitle: "Huzur Pro",
+      premiumTitle: "Kuran Pusulam Pro",
       premiumSubtitle: "Unlimited spiritual content and ad-free experience",
       proFeatures: "Pro Features",
       selectPlan: "Select Plan",
@@ -465,7 +465,7 @@ export const translations: Record<LanguageCode, TranslationSchema> = {
       unlockQibla: "Buka Kompas Presisi",
     },
     premium: {
-      premiumTitle: "Huzur Pro",
+      premiumTitle: "Kuran Pusulam Pro",
       premiumSubtitle: "Konten spiritual tanpa batas dan bebas iklan",
       proFeatures: "Fitur Pro",
       selectPlan: "Pilih Paket",
@@ -551,7 +551,7 @@ export const translations: Record<LanguageCode, TranslationSchema> = {
       unlockQibla: "Buka Kompas Presisi",
     },
     premium: {
-      premiumTitle: "Huzur Pro",
+      premiumTitle: "Kuran Pusulam Pro",
       premiumSubtitle: "Kandungan rohani tanpa had dan bebas iklan",
       proFeatures: "Ciri-ciri Pro",
       selectPlan: "Pilih Pelan",
@@ -723,7 +723,7 @@ export const translations: Record<LanguageCode, TranslationSchema> = {
       unlockQibla: "Déverrouiller la boussole de précision",
     },
     premium: {
-      premiumTitle: "Huzur Pro",
+      premiumTitle: "Kuran Pusulam Pro",
       premiumSubtitle: "Contenu spirituel illimité et sans publicité",
       proFeatures: "Fonctionnalités Pro",
       selectPlan: "Choisir un forfait",
@@ -809,7 +809,7 @@ export const translations: Record<LanguageCode, TranslationSchema> = {
       unlockQibla: "Präzisionskompass freischalten",
     },
     premium: {
-      premiumTitle: "Huzur Pro",
+      premiumTitle: "Kuran Pusulam Pro",
       premiumSubtitle: "Unbegrenzte spirituelle Inhalte und werbefrei",
       proFeatures: "Pro-Funktionen",
       selectPlan: "Tarif wählen",
@@ -895,7 +895,7 @@ export const translations: Record<LanguageCode, TranslationSchema> = {
       unlockQibla: "Desbloquear brújula de precisión",
     },
     premium: {
-      premiumTitle: "Huzur Pro",
+      premiumTitle: "Kuran Pusulam Pro",
       premiumSubtitle: "Contenido espiritual ilimitado y sin anuncios",
       proFeatures: "Características Pro",
       selectPlan: "Seleccionar plan",
@@ -981,7 +981,7 @@ export const translations: Record<LanguageCode, TranslationSchema> = {
       unlockQibla: "Разблокировать точный компас",
     },
     premium: {
-      premiumTitle: "Huzur Pro",
+      premiumTitle: "Kuran Pusulam Pro",
       premiumSubtitle: "Безлимитный духовный контент и отсутствие рекламы",
       proFeatures: "Преимущества Pro",
       selectPlan: "Выберите тариф",
@@ -1067,7 +1067,7 @@ export const translations: Record<LanguageCode, TranslationSchema> = {
       unlockQibla: "Aniq kompasni ochish",
     },
     premium: {
-      premiumTitle: "Huzur Pro",
+      premiumTitle: "Kuran Pusulam Pro",
       premiumSubtitle: "Cheksiz ma'naviy tartib va reklamasiz tajriba",
       proFeatures: "Pro imkoniyatlari",
       selectPlan: "Tarifni tanlang",

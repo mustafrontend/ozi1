@@ -94,7 +94,11 @@ export default function QiblaCompassScreen() {
 
           <div className="mt-2 text-center">
             <h2 className="font-heading text-2xl font-black text-foreground">
-              {isAligned ? "Kıbleye Doğru Hizalandınız" : `Kâbe Açısı: ${Math.round(qiblaAngle)}°`}
+              {isAligned
+                ? "Kıbleye Doğru Hizalandınız"
+                : isPremium
+                  ? `Kâbe Açısı: ${Math.round(qiblaAngle)}°`
+                  : "Kâbe Yönünü Bulun"}
             </h2>
             <p className="mx-auto mt-1 max-w-[270px] text-xs text-muted-foreground">
               Telefonunuzu yatay tutarak ibre altın renkli yıldıza gelene dek dönün.

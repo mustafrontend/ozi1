@@ -13,7 +13,6 @@ interface PremiumContextValue {
   setSelectedPlanId: (id: string) => void;
   purchaseSelectedPlan: () => Promise<boolean>;
   restorePurchases: () => Promise<boolean>;
-  toggleMockPremium: () => Promise<void>;
 }
 
 const PremiumContext = createContext<PremiumContextValue | undefined>(undefined);
@@ -72,12 +71,6 @@ export function PremiumProvider({ children }: { children: React.ReactNode }) {
     }
   }, [refreshSubscription]);
 
-  const toggleMockPremium = useCallback(async () => {
-    const nextVal = !state.isPremium;
-    await revenueCat.setMockPremium(nextVal);
-    await refreshSubscription();
-  }, [state.isPremium, refreshSubscription]);
-
   const value = useMemo(
     () => ({
       isPremium: state.isPremium,
@@ -88,7 +81,6 @@ export function PremiumProvider({ children }: { children: React.ReactNode }) {
       setSelectedPlanId,
       purchaseSelectedPlan,
       restorePurchases,
-      toggleMockPremium,
     }),
     [
       state.isPremium,
@@ -97,7 +89,6 @@ export function PremiumProvider({ children }: { children: React.ReactNode }) {
       selectedPlanId,
       purchaseSelectedPlan,
       restorePurchases,
-      toggleMockPremium,
     ]
   );
 

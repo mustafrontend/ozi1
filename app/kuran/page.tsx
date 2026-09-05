@@ -3,7 +3,7 @@
 import React, { useState, useMemo, memo } from "react";
 import Link from "next/link";
 import { Search, BookOpen, Sparkles, ArrowRight, Lock } from "lucide-react";
-import { ALL_SURAHS } from "@/lib/quranData";
+import { ALL_SURAHS, isFreeSurah } from "@/lib/quranData";
 import { SurahBadge } from "@/components/atoms/SurahBadge";
 import { usePremium } from "@/components/providers/PremiumProvider";
 import { Surah } from "@/lib/types";
@@ -15,8 +15,7 @@ const SurahRowItem = memo(function SurahRowItem({
   surah: Surah;
   isPremium: boolean;
 }) {
-  const isFreeSurah = [1, 36, 55, 67, 112, 113, 114].includes(surah.number);
-  const isLocked = !isPremium && !isFreeSurah;
+  const isLocked = !isPremium && !isFreeSurah(surah.number);
 
   return (
     <Link
