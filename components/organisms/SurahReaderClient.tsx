@@ -1,12 +1,15 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { ArrowLeft, Bookmark, BookmarkCheck, Share2, Repeat, ChevronLeft, ChevronRight, Info } from "lucide-react";
 import { ALL_SURAHS, isFreeSurah, FREE_BOOKMARK_LIMIT } from "@/lib/quranData";
 import { MiniAudioPlayer } from "@/components/molecules/MiniAudioPlayer";
 import { usePremium } from "@/components/providers/PremiumProvider";
 import { ProGateModal } from "@/components/molecules/ProGateModal";
+import { storage } from "@/lib/storage";
+
+const BOOKMARKS_STORAGE_KEY = "quran_bookmarked_verses";
 
 interface SurahReaderClientProps {
   surahId: string;
@@ -18,19 +21,34 @@ export function SurahReaderClient({ surahId }: SurahReaderClientProps) {
   const { isPremium } = usePremium();
   const isLocked = !isPremium && !isFreeSurah(currentSurah.number);
 
-  const [savedVerses, setSavedVerses] = useState<number[]>([13]);
+  const [bookmarks, setBookmarks] = useState<Record<string, number[]>>({});
   const [isGateOpen, setIsGateOpen] = useState(false);
 
-  const toggleBookmark = (vNum: number) => {
-    setSavedVerses((prev) => {
-      if (prev.includes(vNum)) return prev.filter((n) => n !== vNum);
-      if (!isPremium && prev.length >= FREE_BOOKMARK_LIMIT) {
+  useEffect(() => {
+    storage.getJSON<Record<string, number[]>>(BOOKMARKS_STORAGE_KEY, {}).then(setBookmarks);
+  }, []);
+
+  const savedVerses = bookmarks[String(currentSurah.number)] || [];
+  const totalBookmarkCount = Object.values(bookmarks).reduce((sum, arr) => sum + arr.length, 0);
+
+  const toggleBookmark = useCallback(
+    (vNum: number) => {
+      const surahKey = String(currentSurah.number);
+      const current = bookmarks[surahKey] || [];
+      const isSaved = current.includes(vNum);
+
+      if (!isSaved && !isPremium && totalBookmarkCount >= FREE_BOOKMARK_LIMIT) {
         setIsGateOpen(true);
-        return prev;
+        return;
       }
-      return [...prev, vNum];
-    });
-  };
+
+      const nextForSurah = isSaved ? current.filter((n) => n !== vNum) : [...current, vNum];
+      const next = { ...bookmarks, [surahKey]: nextForSurah };
+      setBookmarks(next);
+      storage.setJSON(BOOKMARKS_STORAGE_KEY, next);
+    },
+    [bookmarks, currentSurah.number, isPremium, totalBookmarkCount]
+  );
 
   const prevSurah = ALL_SURAHS.find((s) => s.number === surahIdNum - 1) || ALL_SURAHS[ALL_SURAHS.length - 1];
   const nextSurah = ALL_SURAHS.find((s) => s.number === surahIdNum + 1) || ALL_SURAHS[0];
