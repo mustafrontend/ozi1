@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Kuran Pusulam</string>
+    <string name="title_activity_main">Kuran Pusulam</string>
+    <string name="package_name">com.kuranpusulam.matchers</string>
+    <string name="custom_url_scheme">com.kuranpusulam.matchers</string>
+</resources>

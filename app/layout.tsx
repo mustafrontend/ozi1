@@ -7,11 +7,15 @@ import { AudioProvider } from "@/components/providers/AudioProvider";
 import { BottomNav } from "@/components/organisms/BottomNav";
 
 export const metadata: Metadata = {
-  title: "Huzur - İslami Yaşam ve Manevi Rehber",
+  title: "Kuran Pusulam - İslami Yaşam ve Manevi Rehber",
   description: "Namaz vakitleri, Kur'an tilaveti, kıble pusulası ve güvenilir İslami rehberlik uygulaması.",
   manifest: "/manifest.json",
   icons: {
-    icon: "/icon.svg",
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
+    apple: "/apple-touch-icon.png",
   },
 };
 
