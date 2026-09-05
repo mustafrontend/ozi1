@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
 import { ArrowLeft, Play, Pause, Volume2, Quote, Info, CheckCircle2, ArrowRight } from "lucide-react";
 import { PRAYER_GUIDE_STEPS } from "@/lib/quranData";
@@ -9,8 +9,56 @@ import { Button } from "@/components/atoms/Button";
 export default function PrayerGuideScreen() {
   const [activeStepId, setActiveStepId] = useState(1);
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
+  const [isSpeechSupported, setIsSpeechSupported] = useState(false);
+  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
   const activeStep = PRAYER_GUIDE_STEPS.find((s) => s.id === activeStepId) || PRAYER_GUIDE_STEPS[0];
+
+  useEffect(() => {
+    setIsSpeechSupported(typeof window !== "undefined" && "speechSynthesis" in window);
+    return () => {
+      if (typeof window !== "undefined" && "speechSynthesis" in window) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, []);
+
+  // Stop narration when the user switches steps
+  useEffect(() => {
+    if (typeof window !== "undefined" && "speechSynthesis" in window) {
+      window.speechSynthesis.cancel();
+    }
+    setIsAudioPlaying(false);
+  }, [activeStepId]);
+
+  const toggleAudioGuide = useCallback(() => {
+    if (!isSpeechSupported) return;
+
+    if (isAudioPlaying) {
+      window.speechSynthesis.cancel();
+      setIsAudioPlaying(false);
+      return;
+    }
+
+    const textToSpeak = [
+      activeStep.title,
+      activeStep.description,
+      activeStep.duaTransliteration,
+    ]
+      .filter(Boolean)
+      .join(". ");
+
+    const utterance = new SpeechSynthesisUtterance(textToSpeak);
+    utterance.lang = "tr-TR";
+    utterance.rate = 0.95;
+    utterance.onend = () => setIsAudioPlaying(false);
+    utterance.onerror = () => setIsAudioPlaying(false);
+    utteranceRef.current = utterance;
+
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(utterance);
+    setIsAudioPlaying(true);
+  }, [isAudioPlaying, isSpeechSupported, activeStep]);
 
   return (
     <div className="min-h-screen pb-32 font-body">
@@ -39,14 +87,20 @@ export default function PrayerGuideScreen() {
               <p className="mt-1 text-xs text-muted-foreground">İki rekâtlık farz veya sünnet namazın eksiksiz kılınışı.</p>
             </div>
             <button
-              onClick={() => setIsAudioPlaying(!isAudioPlaying)}
-              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-glow active:scale-95"
+              onClick={toggleAudioGuide}
+              disabled={!isSpeechSupported}
+              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-glow active:scale-95 disabled:opacity-40"
             >
               {isAudioPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5 fill-current ml-0.5" />}
             </button>
           </div>
           <div className="mt-4 flex items-center gap-2 text-xs font-bold text-primary">
-            <Volume2 className="h-4 w-4" /> Sesli Rehber · 2 dk
+            <Volume2 className="h-4 w-4" />
+            {isSpeechSupported
+              ? isAudioPlaying
+                ? `Okunuyor: ${activeStep.name}`
+                : "Sesli Rehber · Adımı Dinle"
+              : "Sesli rehber bu cihazda desteklenmiyor"}
           </div>
         </div>
 

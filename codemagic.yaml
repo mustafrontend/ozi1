@@ -6,6 +6,7 @@ workflows:
     environment:
       groups:
         - appstore_credentials
+        - revenuecat_credentials
       vars:
         BUNDLE_ID: "com.kuranpusulam.matchers"
         APP_STORE_CONNECT_ISSUER_ID: "af8077cc-1f5f-4bae-bebc-9aa57e9577a9"
@@ -73,6 +74,8 @@ workflows:
     max_build_duration: 45
     instance_type: linux_x2
     environment:
+      groups:
+        - revenuecat_credentials
       node: 20
       java: 17
     scripts:
@@ -82,9 +85,8 @@ workflows:
       - name: Build Next.js Web App
         script: |
           npm run build
-      - name: Initialize & Sync Capacitor Android
+      - name: Sync Capacitor Android
         script: |
-          npx cap add android || true
           npx cap sync android
       - name: Build Android Release APK & AAB
         script: |
