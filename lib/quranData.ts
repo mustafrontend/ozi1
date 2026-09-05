@@ -1,4 +1,7 @@
 import { Surah, Verse } from "./types";
+import quranVersesData from "./data/quran-verses.json";
+
+const QURAN_VERSES: Record<string, Verse[]> = quranVersesData as Record<string, Verse[]>;
 
 // Complete metadata for all 114 Surahs of the Holy Quran
 export const ALL_114_SURAHS_META: Omit<Surah, "verses">[] = [
@@ -118,6 +121,16 @@ export const ALL_114_SURAHS_META: Omit<Surah, "verses">[] = [
   { number: 114, name: "Nâs", arabicName: "الناس", meaning: "İnsanlar", versesCount: 6, revelationType: "Mekke" },
 ];
 
+/** Surahs readable without a Pro subscription. */
+export const FREE_SURAH_NUMBERS = [1, 36, 55, 67, 112, 113, 114];
+
+export function isFreeSurah(surahNumber: number): boolean {
+  return FREE_SURAH_NUMBERS.includes(surahNumber);
+}
+
+/** Verses a non-Pro user may bookmark before being asked to upgrade. */
+export const FREE_BOOKMARK_LIMIT = 5;
+
 /**
  * Format surah audio URL (Mishary Rashid Alafasy)
  */
@@ -127,74 +140,12 @@ export function getSurahAudioUrl(surahNumber: number): string {
 }
 
 /**
- * Generates sample/authentic verses for any of the 114 Surahs if custom verses aren't hardcoded
+ * Real Quranic text for all 114 Surahs: Uthmani Arabic script, a standard
+ * transliteration, and the Diyanet İşleri Turkish translation, sourced from
+ * api.alquran.cloud and bundled locally (see scripts/build-quran-data.js).
  */
 export function getSurahVerses(surahNumber: number): Verse[] {
-  const meta = ALL_114_SURAHS_META.find((s) => s.number === surahNumber);
-  if (!meta) return [];
-
-  // Fatiha (1)
-  if (surahNumber === 1) {
-    return [
-      { number: 1, surahNumber: 1, arabic: "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ", transliteration: "Bismillâhir-rahmânir-rahîm", translation: "Rahmân ve Rahîm olan Allah'ın adıyla.", featured: true },
-      { number: 2, surahNumber: 1, arabic: "الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ", transliteration: "Elhamdü lillâhi rabbil-‘âlemîn", translation: "Hamd, âlemlerin Rabbi olan Allah'a mahsustur." },
-      { number: 3, surahNumber: 1, arabic: "الرَّحْمَٰنِ الرَّحِيمِ", transliteration: "Er-rahmânir-rahîm", translation: "O, Rahmân'dır, Rahîm'dir." },
-      { number: 4, surahNumber: 1, arabic: "مَالِكِ يَوْمِ الدِّينِ", transliteration: "Mâliki yevmid-dîn", translation: "Din (hesap) gününün sahibidir." },
-      { number: 5, surahNumber: 1, arabic: "إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ", transliteration: "İyyâke na’büdü ve iyyâke neste’în", translation: "Yalnız Sana kulluk eder, yalnız Senden yardım dileriz." },
-      { number: 6, surahNumber: 1, arabic: "اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ", transliteration: "İhdinas-sırâtal-müstekîm", translation: "Bizi doğru yola ilet." },
-      { number: 7, surahNumber: 1, arabic: "صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ", transliteration: "Sırâtallezîne en’amte ‘aleyhim gayril-magdûbi ‘aleyhim veled-dâllîn", translation: "Kendilerine lütufta bulunduğun kimselerin yoluna; gazaba uğramışların ve sapmışların yoluna değil." },
-    ];
-  }
-
-  // Ihlas (112)
-  if (surahNumber === 112) {
-    return [
-      { number: 1, surahNumber: 112, arabic: "قُلْ هُوَ اللَّهُ أَحَدٌ", transliteration: "Kul hüvallâhu ehad", translation: "De ki: O Allah birdir.", featured: true },
-      { number: 2, surahNumber: 112, arabic: "اللَّهُ الصَّمَدُ", transliteration: "Allâhus-samed", translation: "Allah Samed'dir (her şey O'na muhtaç, O hiçbir şeye muhtaç değildir)." },
-      { number: 3, surahNumber: 112, arabic: "لَمْ يَلِدْ وَلَمْ يُولَدْ", transliteration: "Lem yelid ve lem yûled", translation: "O doğurmamış ve doğmamıştır." },
-      { number: 4, surahNumber: 112, arabic: "وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ", transliteration: "Ve lem yekün lehû küfüven ehad", translation: "Hiçbir şey O'na denk ve benzer değildir." },
-    ];
-  }
-
-  // Felak (113)
-  if (surahNumber === 113) {
-    return [
-      { number: 1, surahNumber: 113, arabic: "قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ", transliteration: "Kul e’ûzu bi-rabbil-felak", translation: "De ki: Sabahın Rabbine sığınırım,", featured: true },
-      { number: 2, surahNumber: 113, arabic: "مِن شَرِّ مَا خَلَقَ", transliteration: "Min şerri mâ halak", translation: "Yarattığı şeylerin şerrinden," },
-      { number: 3, surahNumber: 113, arabic: "وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ", transliteration: "Ve min şerri gâsikin izâ vekab", translation: "Karanlığı çöktüğü zaman gecenin şerrinden," },
-      { number: 4, surahNumber: 113, arabic: "وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ", transliteration: "Ve min şerrin-neffâsâti fil-ukad", translation: "Düğümlere üfleyenlerin şerrinden," },
-      { number: 5, surahNumber: 113, arabic: "وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ", transliteration: "Ve min şerri hâsidin izâ hased", translation: "Ve haset ettiği zaman hasetçinin şerrinden." },
-    ];
-  }
-
-  // Nas (114)
-  if (surahNumber === 114) {
-    return [
-      { number: 1, surahNumber: 114, arabic: "قُلْ أَعُوذُ بِرَبِّ النَّاسِ", transliteration: "Kul e’ûzu bi-rabbin-nâs", translation: "De ki: İnsanların Rabbine sığınırım,", featured: true },
-      { number: 2, surahNumber: 114, arabic: "مَلِكِ النَّاسِ", transliteration: "Melikin-nâs", translation: "İnsanların hükümdarına," },
-      { number: 3, surahNumber: 114, arabic: "إِلَٰهِ النَّاسِ", transliteration: "İlâhin-nâs", translation: "İnsanların ilahına," },
-      { number: 4, surahNumber: 114, arabic: "مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ", transliteration: "Min şerril-vesvâsil-hannâs", translation: "Sinsi vesvesecinin şerrinden," },
-      { number: 5, surahNumber: 114, arabic: "الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ", transliteration: "Ellezî yuvesvisu fî sudûrin-nâs", translation: "Ki o, insanların göğüslerine vesvese verir," },
-      { number: 6, surahNumber: 114, arabic: "مِنَ الْجِنَّةِ وَالنَّاسِ", transliteration: "Minel-cinneti ven-nâs", translation: "Gerek cinlerden, gerekse insanlardan..." },
-    ];
-  }
-
-  // Dynamic generate for any other of the 114 surahs
-  const displayCount = Math.min(meta.versesCount, 5);
-  const verses: Verse[] = [];
-
-  for (let i = 1; i <= displayCount; i++) {
-    verses.push({
-      number: i,
-      surahNumber,
-      arabic: i === 1 ? `بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ - ${meta.arabicName}` : `آيَةُ ${i} مِنْ سُورَةِ ${meta.arabicName}`,
-      transliteration: `${meta.name} Suresi ${i}. Ayet okunuşu ve tefekkürü`,
-      translation: `Şüphesiz ${meta.name} suresinin ${i}. ayeti Allah'ın hikmet ve merhametini beyan eder.`,
-      featured: i === 1,
-    });
-  }
-
-  return verses;
+  return QURAN_VERSES[String(surahNumber)] ?? [];
 }
 
 export const ALL_SURAHS: Surah[] = ALL_114_SURAHS_META.map((meta) => ({
